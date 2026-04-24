@@ -90,50 +90,15 @@ enum Preference {
   dormWaterToken(key: "dorm_water_token", type: "String"), // 宿舍水机登录 token
   dormWaterUid(key: "dorm_water_uid", type: "String"), // 宿舍水机用户 uid
   dormWaterEid(key: "dorm_water_eid", type: "String"), // 宿舍水机用户 eid
-  currentTimeIndicatorEnabled(
-    key: "currentTimeIndicatorEnabled",
-    type: "bool",
-  ), // 当前时间标线开关
-  currentTimeIndicatorShowTimeLabel(
-    key: "currentTimeIndicatorShowTimeLabel",
-    type: "bool",
-  ), // 时间标线标签开关
-  currentTimeIndicatorShowTodayColumnHighlight(
-    key: "currentTimeIndicatorShowTodayColumnHighlight",
-    type: "bool",
-  ), // 高亮当日列开关
-  classStyleActiveBrightnessFactor(
-    key: "classStyleActiveBrightnessFactor",
-    type: "double",
-  ), // 未开始课程亮度
-  classStyleActiveBorderAlpha(
-    key: "classStyleActiveBorderAlpha",
-    type: "double",
-  ), // 未开始课程边框透明度
-  classStyleActiveInnerAlpha(
-    key: "classStyleActiveInnerAlpha",
-    type: "double",
-  ), // 未开始课程底色透明度
-  classStyleCompletedSaturationFactor(
-    key: "classStyleCompletedSaturationFactor",
-    type: "double",
-  ), // 已完成课程饱和度
-  classStyleCompletedBrightnessFactor(
-    key: "classStyleCompletedBrightnessFactor",
-    type: "double",
-  ), // 已完成课程亮度
-  classStyleCompletedTextSaturationFactor(
-    key: "classStyleCompletedTextSaturationFactor",
-    type: "double",
-  ), // 已完成课程文本饱和度
-  classStyleCompletedBorderAlpha(
-    key: "classStyleCompletedBorderAlpha",
-    type: "double",
-  ), // 已完成课程边框透明度
-  classStyleCompletedInnerAlpha(
-    key: "classStyleCompletedInnerAlpha",
-    type: "double",
-  ); // 已完成课程底色透明度
+  systemCalendarId(key: "system_calendar_id", type: "String"), // 导出的系统日历 id
+  systemCalendarSemesterCode(
+    key: "system_calendar_semester_code",
+    type: "String",
+  ), // 导出的系统日历绑定学期
+  systemCalendarSnapshot(
+    key: "system_calendar_snapshot",
+    type: "String",
+  ); // 上次同步到系统日历的数据快照
 
   const Preference({required this.key, this.type = "String"});
 
