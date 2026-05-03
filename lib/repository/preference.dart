@@ -42,12 +42,12 @@ enum Preference {
   //execution(key: "execution", type: "String"), // 书院
   //institutes(key: "institutes", type: "String"), // 学院
   //subject(key: "subject", type: "String"), // 专业
-  electricityAccount(key: "electricityAccount", type: "String"), // 电费账号
+  //electricityAccount(key: "electricityAccount", type: "String"), // 电费账号
   idsAccount(key: "idsAccount", type: "String"), // 一站式帐号
   idsPassword(key: "idsPassword", type: "String"), // 一站式密码
   sportPassword(key: "sportPassword", type: "String"), // 体育系统密码
   experimentPassword(key: "experimentPassword", type: "String"), // 物理实验密码
-  electricityPassword(key: "electricityPassword", type: "String"), // 电费密码
+  //electricityPassword(key: "electricityPassword", type: "String"), // 电费密码
   decorated(key: "decorated", type: "bool"), // 课表是否开启背景
   decoration(key: "decoration", type: "bool"), // 背景图是否设置
   swift(key: "swift", type: "int"), // 周次偏移
@@ -98,7 +98,51 @@ enum Preference {
   systemCalendarSnapshot(
     key: "system_calendar_snapshot",
     type: "String",
-  ); // 上次同步到系统日历的数据快照
+  ), // 上次同步到系统日历的数据快照
+  currentTimeIndicatorEnabled(
+    key: "currentTimeIndicatorEnabled",
+    type: "bool",
+  ), // 当前时间标线开关
+  currentTimeIndicatorShowTimeLabel(
+    key: "currentTimeIndicatorShowTimeLabel",
+    type: "bool",
+  ), // 时间标线标签开关
+  currentTimeIndicatorShowTodayColumnHighlight(
+    key: "currentTimeIndicatorShowTodayColumnHighlight",
+    type: "bool",
+  ), // 高亮当日列开关
+  classStyleActiveBrightnessFactor(
+    key: "classStyleActiveBrightnessFactor",
+    type: "double",
+  ), // 未开始课程亮度
+  classStyleActiveBorderAlpha(
+    key: "classStyleActiveBorderAlpha",
+    type: "double",
+  ), // 未开始课程边框透明度
+  classStyleActiveInnerAlpha(
+    key: "classStyleActiveInnerAlpha",
+    type: "double",
+  ), // 未开始课程底色透明度
+  classStyleCompletedSaturationFactor(
+    key: "classStyleCompletedSaturationFactor",
+    type: "double",
+  ), // 已完成课程饱和度
+  classStyleCompletedBrightnessFactor(
+    key: "classStyleCompletedBrightnessFactor",
+    type: "double",
+  ), // 已完成课程亮度
+  classStyleCompletedTextSaturationFactor(
+    key: "classStyleCompletedTextSaturationFactor",
+    type: "double",
+  ), // 已完成课程文本饱和度
+  classStyleCompletedBorderAlpha(
+    key: "classStyleCompletedBorderAlpha",
+    type: "double",
+  ), // 已完成课程边框透明度
+  classStyleCompletedInnerAlpha(
+    key: "classStyleCompletedInnerAlpha",
+    type: "double",
+  ); // 已完成课程底色透明度
 
   const Preference({required this.key, this.type = "String"});
 
