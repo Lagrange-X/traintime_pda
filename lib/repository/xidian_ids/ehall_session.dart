@@ -9,7 +9,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:synchronized/synchronized.dart';
-import 'package:watermeter/page/login/jc_captcha.dart';
+import 'package:watermeter/repository/xidian_ids/slider_captcha_client.dart';
 import 'package:watermeter/repository/logger.dart';
 import 'package:watermeter/repository/xidian_ids/ids_session.dart';
 
@@ -51,7 +51,7 @@ class EhallSession extends IDSSession {
   }) async {
     String location = await super.login(
       target:
-          "https://ehall.xidian.edu.cn:443/login?service=https://ehall.xidian.edu.cn/new/index.html",
+          "https://ehall.xidian.edu.cn/login?service=https://ehall.xidian.edu.cn/new/index.html",
       username: username,
       password: password,
       sliderCaptcha: sliderCaptcha,
@@ -78,10 +78,10 @@ class EhallSession extends IDSSession {
       if (!await isLoggedIn()) {
         String location = await super.checkAndLogin(
           target:
-              "https://ehall.xidian.edu.cn:443/login?"
+              "https://ehall.xidian.edu.cn/login?"
               "service=https://ehall.xidian.edu.cn/new/index.html",
           sliderCaptcha: (String cookieStr) =>
-              SliderCaptchaClientProvider(cookie: cookieStr).solve(null),
+              SliderCaptchaClientProvider(cookie: cookieStr).solve(),
         );
         var response = await dio.get(location);
         while (response.headers[HttpHeaders.locationHeader] != null) {

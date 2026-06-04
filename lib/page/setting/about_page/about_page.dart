@@ -23,9 +23,10 @@ class AboutPage extends StatefulWidget {
 }
 
 class _AboutPageState extends State<AboutPage> {
-  final String urlOthers = "https://www.bilibili.com/video/BV1S24y1K7vn/";
+  final String urlOthers = "https://www.bilibili.com/video/BV1sA411X7V4";
 
-  final String urlApple = "https://www.bilibili.com/video/BV1W6LhznEzn/";
+  final String urlApple =
+      "https://www.bilibili.com/video/BV1WW41187VR?t=3523.9";
 
   List<Developer> getDevelopers() => [
     Developer(
@@ -136,6 +137,13 @@ class _AboutPageState extends State<AboutPage> {
       FlutterI18n.translate(context, "setting.about_page.hhzm"),
       "https://hhzm.win/",
     ),
+    Developer(
+      "imaginary_17",
+      "https://avatars.githubusercontent.com/u/70046513",
+      FlutterI18n.translate(context, "setting.about_page.imaginary_17"),
+      "https://github.com/clever-max",
+    ),
+
     Developer(
       "imoscarz",
       "https://avatars.githubusercontent.com/u/52318095",
@@ -309,7 +317,7 @@ class _AboutPageState extends State<AboutPage> {
                   TextSpan(
                     text:
                         "${Platform.isIOS || Platform.isMacOS ? "" : ""}"
-                        "Himawari in the Sky Edition",
+                        "Children of the World Edition",
                     style: const TextStyle(fontSize: 16),
                   ),
                 ],
