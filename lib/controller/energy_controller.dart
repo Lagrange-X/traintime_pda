@@ -6,15 +6,21 @@ import 'package:time/time.dart';
 import 'package:watermeter/model/fetch_result.dart';
 import 'package:watermeter/model/xidian_ids/energy.dart';
 import 'package:watermeter/repository/logger.dart';
-import 'package:watermeter/repository/xidian_ids/energy_session.dart';
+import 'package:watermeter/repository/preference.dart' as preference;
+import 'package:watermeter/repository/ids_session/energy_session.dart';
 
 class EnergyController {
   static final EnergyController i = EnergyController._();
+  static const int defaultLowElectricityWarningThreshold = 20;
   bool _isReloading = false;
 
+  final EnergySession session = EnergySession();
+
   EnergyController._() {
+    updateElectricityWarning();
+
     // Load last successful fetched electricity info
-    final cache = EnergySession.getCache();
+    final cache = session.getCache();
     if (cache != null) {
       _lastValidEnergyInfo.value = cache;
       energyInfoStateSignal.value = AsyncState.data(cache);
@@ -23,14 +29,63 @@ class EnergyController {
     // Load last updated electricity info
     historyElectricityInfoList
       ..clear()
-      ..addAll(EnergySession.getElectricityHistory());
+      ..addAll(session.getElectricityHistory());
   }
 
   final _lastValidEnergyInfo = signal<FetchResult<EnergyInfo>?>(null);
   final energyInfoStateSignal = signal<AsyncState<FetchResult<EnergyInfo>>>(
     const AsyncLoading(),
   );
+
+  final electricityWarning = signal<int>(defaultLowElectricityWarningThreshold);
+
   final historyElectricityInfoList = <ElectricityHistoryInfo>[];
+
+  /// ============================================
+  ///  Electricity Warning Function and Threshold
+  /// ============================================
+
+  void updateElectricityWarning() {
+    final isEnabled =
+        !preference.contains(
+          preference.Preference.lowElectricityWarningEnabled,
+        ) ||
+        preference.getBool(preference.Preference.lowElectricityWarningEnabled);
+    if (!isEnabled) {
+      electricityWarning.value = -1;
+      return;
+    }
+
+    if (!preference.contains(
+      preference.Preference.lowElectricityWarningThreshold,
+    )) {
+      electricityWarning.value = defaultLowElectricityWarningThreshold;
+      return;
+    }
+
+    final threshold = preference.getInt(
+      preference.Preference.lowElectricityWarningThreshold,
+    );
+    electricityWarning.value = threshold > 0
+        ? threshold
+        : defaultLowElectricityWarningThreshold;
+  }
+
+  Future<void> setLowElectricityWarningEnabled(bool value) async {
+    await preference.setBool(
+      preference.Preference.lowElectricityWarningEnabled,
+      value,
+    );
+    updateElectricityWarning();
+  }
+
+  Future<void> setLowElectricityWarningThreshold(int value) async {
+    await preference.setInt(
+      preference.Preference.lowElectricityWarningThreshold,
+      value > 0 ? value : defaultLowElectricityWarningThreshold,
+    );
+    updateElectricityWarning();
+  }
 
   void _syncLastValidElectricity(FetchResult<EnergyInfo> result) {
     _lastValidEnergyInfo.value = result;
@@ -58,10 +113,14 @@ class EnergyController {
         remain: info.electricityRemain.toString(),
       ),
     );
-    EnergySession.saveElectricityHistory(newHistoryInfo);
+    session.saveElectricityHistory(newHistoryInfo);
     historyElectricityInfoList.clear();
     historyElectricityInfoList.addAll(newHistoryInfo);
   }
+
+  /// ==================
+  ///  Electricity Info
+  /// ==================
 
   Future<void> refreshElectricityInfo({bool force = false}) async {
     if (_isReloading) return;
@@ -71,7 +130,7 @@ class EnergyController {
         ? AsyncState.dataRefreshing(previous)
         : AsyncState.loading();
     try {
-      final result = await getElectricityInfo();
+      final result = await session.getElectricityInfo();
       _syncLastValidElectricity(result);
       energyInfoStateSignal.value = AsyncState.data(result);
     } catch (e, s) {
@@ -83,7 +142,7 @@ class EnergyController {
   }
 
   void clearElectricityHistory() {
-    EnergySession.clearElectricityHistory();
+    session.clearElectricityHistory();
     historyElectricityInfoList.clear();
   }
 

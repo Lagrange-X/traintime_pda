@@ -2,6 +2,7 @@
 // Copyright 2025 Traintime PDA authors.
 // SPDX-License-Identifier: MPL-2.0 OR Apache-2.0
 
+import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
 
@@ -11,7 +12,7 @@ import 'package:flutter_i18n/flutter_i18n.dart';
 import 'package:intl/intl.dart';
 
 import 'package:styled_widget/styled_widget.dart';
-import 'package:watermeter/model/xidian_ids/classtable.dart';
+import 'package:watermeter/model/pda_service/custom_class.dart';
 import 'package:watermeter/page/classtable/class_add/class_add_window.dart';
 import 'package:watermeter/page/classtable/class_page/class_change_list.dart';
 import 'package:watermeter/page/classtable/class_page/classtable_inline_banner.dart';
@@ -23,7 +24,7 @@ import 'package:watermeter/page/classtable/classtable_state.dart';
 import 'package:watermeter/page/classtable/class_page/not_arranged_class_list.dart';
 import 'package:watermeter/page/classtable/class_page/week_choice_view.dart';
 import 'package:watermeter/page/public_widget/toast.dart';
-import 'package:watermeter/repository/network_session.dart';
+import 'package:watermeter/repository/network_client.dart';
 import 'package:watermeter/repository/preference.dart' as preference;
 
 class ContentClassTablePage extends StatefulWidget {
@@ -739,22 +740,19 @@ class _ContentClassTablePageState extends State<ContentClassTablePage> {
                   int semesterLength = ClassTableState.of(
                     context,
                   )!.controllers.semesterLength;
-                  (ClassDetail, TimeArrangement)? data =
-                      await Navigator.of(
-                        context,
-                      ).push<(ClassDetail, TimeArrangement)>(
-                        MaterialPageRoute(
-                          builder: (BuildContext context) {
-                            return ClassAddWindow(
-                              semesterLength: semesterLength,
-                            );
-                          },
-                        ),
-                      );
+                  dynamic data = await Navigator.of(context).push<dynamic>(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) {
+                        return ClassAddWindow(semesterLength: semesterLength);
+                      },
+                    ),
+                  );
                   if (context.mounted && data != null) {
-                    await ClassTableState.of(
-                      context,
-                    )!.controllers.addUserDefinedClass(data.$1, data.$2);
+                    if (data is CustomClass) {
+                      await ClassTableState.of(
+                        context,
+                      )!.controllers.addCustomClass(data);
+                    }
                   }
                   break;
                 case 'D':
@@ -801,7 +799,7 @@ class _ContentClassTablePageState extends State<ContentClassTablePage> {
                         fileName: fileName,
                         allowedExtensions: ["ics"],
                         bytes: Uint8List.fromList(
-                          classTableState.iCalenderStr.codeUnits,
+                          utf8.encode(classTableState.iCalenderStr),
                         ),
                         lockParentWindow: true,
                       );

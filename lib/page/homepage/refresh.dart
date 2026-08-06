@@ -17,7 +17,8 @@ import 'package:watermeter/repository/notification/course_reminder_service.dart'
 import 'package:watermeter/repository/preference.dart' as preference;
 import 'package:watermeter/repository/system_calendar_sync_service.dart';
 import 'package:watermeter/repository/widget_state_sync.dart';
-import 'package:watermeter/repository/xidian_ids/ids_session.dart';
+import 'package:watermeter/repository/ids_session/ids_session.dart';
+import 'package:watermeter/repository/ids_session/ids_reauth_client.dart';
 
 Future<void> _comboLogin({
   required Future<void> Function(String) sliderCaptcha,
@@ -41,6 +42,9 @@ Future<void> _comboLogin({
       "[_comboLogin] "
       "Combo login failed! Because your password is wrong.",
     );
+  } on IDSReAuthCancelledException {
+    loginState = IDSLoginState.cancelled;
+    log.info('[_comboLogin] SMS verification was cancelled by the user.');
   } catch (e, s) {
     loginState = IDSLoginState.fail;
     log.warning(
@@ -95,7 +99,8 @@ Future<void> update({
   }
 
   // Sync login state to iOS widget
-  final hasCredential = preference.getString(preference.Preference.idsAccount).isNotEmpty &&
+  final hasCredential =
+      preference.getString(preference.Preference.idsAccount).isNotEmpty &&
       preference.getString(preference.Preference.idsPassword).isNotEmpty;
   await syncWidgetLoginState(hasCredential);
 }

@@ -25,6 +25,7 @@ login_process:
   get_encrypt: Obtain password encryption key
   ready_login: Prepare to login
   slider: Logging in
+  second_factor: Waiting for SMS verification
   after_process: Post-login processing
   failed: "Login failed, response status code: {statusCode}"
 no_info: No information
@@ -46,6 +47,19 @@ weekday:
   friday: Fri.
   saturday: Sat.
   sunday: Sun.
+month:
+  january: Jan.
+  february: Feb.
+  march: Mar.
+  april: Apr.
+  may: May
+  june: Jun.
+  july: Jul.
+  august: Aug.
+  september: Sept.
+  october: Oct.
+  november: Nov.
+  december: Dec.
 class_attendance:
   title: Attendance Query
   detail_title: Attendance Detail - {courseName}
@@ -75,6 +89,7 @@ class_attendance:
       Required"
     not_attend: Rebirths
     not_attend_info: "{timeToHaveError} Times / {totalTimes} Total"
+    not_attend_info_error: Cannot match course in the classtable
     leave: Leaves
     leave_info: Personal {personalLeave} / Sick {sickLeave} / Official {officialLeave}
     study: Study
@@ -258,6 +273,16 @@ classtable:
     input_start_time_hint: Time start
     input_end_time_hint: Time end
     wheel_choose_hint: Period {index}
+    choose_at_least_one: Please choose at least one time for class
+    repeat_weekly: Repeat Weekly
+    free_time: Free Time
+    date_selector_free:
+      rule: Time must be between 8:30 and 21:25.
+      rule_2: The end time must be later than the start time.
+      class_start_time: Start time
+      class_end_time: End time
+      edit_class_time: Edit the class time
+      choose_class_time: Choose a class time
   course_detail_card:
     class_number_string: Class {number}
     unknown_teacher: Unknown teacher
@@ -265,8 +290,11 @@ classtable:
     class_period: period {start} to {stop}
     edit: Edit
     delete: Delete
-    delete_title: Are you sure to delete this class information?
+    delete_single: "Delete this one"
+    delete_all: "Delete all"
     delete_content: Everything will be excuted.
+    delete_content_single: "Only the information within this time range of the class will be removed."
+    delete_title: Are you sure to delete this class information?
   output_to_system:
     success: Successfully output to the system calendar.
     failure: Problem occurred while outputing to the system calendar.
@@ -338,6 +366,7 @@ electricity:
     History will be recorded locally while average usage is based on the electric
     meter's record."
   fetching_hint: Fetching the latest electricity info.
+  fetch_error: Failed to fetch electricity information. Please retry.
   date: Date
   power: Remaining
   update: Refresh
@@ -345,7 +374,21 @@ electricity:
   water_usage_read_before: Last time
   water_usage_read_now: This time
   water_usage: Bath water usage
+  water_title: Water usage
+  water_loading: Loading water usage information
+  water_unavailable: Water usage is unavailable. Retry from the electricity card.
+  water_empty: No water usage information
   not_school_network: Not school network
+  aircon_title: Aircon Electricity
+  aircon_imei: Aircon IMEI
+  aircon_amount: Platform usage
+  aircon_update_time: Updated at
+  aircon_waiting: Waiting to fetch aircon electricity data
+  aircon_error: Failed to fetch aircon electricity data
+  aircon_retry: Retry
+  aircon_imei_missing: Add the aircon IMEI to view its electricity usage.
+  aircon_add_imei: Add aircon IMEI
+  aircon_cache_notice: "Showing cached aircon data from {time}"
 empty_classroom:
   title: Empty Classrooms
   date: Date {date}
@@ -635,6 +678,19 @@ library:
   borrow_list_info: Borrowing {borrow} book(s), among which {dued} book(s) have expired
   search_book_window: null
   search_here: Search here
+  normal_search: Normal Search
+  advanced_search: Advanced Search
+  search: Search
+  match_mode: Match Mode
+  match_exact: Exact
+  match_fuzzy: Fuzzy
+  match_prefix: Prefix
+  document_type: Document Type
+  document_type_all: All
+  document_type_book: Book
+  only_on_shelf: Only on shelf
+  publish_year_begin: Publish year from
+  publish_year_end: Publish year to
   book_detail: Book details
   no_result: No result, change parameter or start your search
 library_card:
@@ -664,7 +720,20 @@ login:
     title: Please enter captcha
     hint: Input captcha
     message_on_empty: Please enter captcha
+    refresh_failed: "Failed to refresh captcha: {error}"
   slider_title: Server authentication service
+  second_factor:
+    title: SMS verification
+    description: The school requires an additional verification step. Request and enter the SMS code to continue.
+    code: SMS code
+    empty_code: Enter the SMS code
+    send_code: Send code
+    resend_countdown: "Resend in {seconds}s"
+    trust_device: Trust this device
+    trust_device_hint: The school may skip verification on this device for a limited time
+    network_error: Verification request failed. Check your connection and retry.
+    cancelled: SMS verification cancelled
+    expired: Verification expired. Please log in again.
 school_net:
   title: School Net Usage Query
   ids_account_net:
@@ -801,6 +870,15 @@ setting:
   color_setting: Color theme
   simplify_timeline: Simplify schedule timeline
   simplify_timeline_description: Reduce space occupation while no schedule
+  low_electricity_warning: Low electricity card color warning
+  low_electricity_warning_description:
+    Change the homepage electricity card color when remaining electricity is below
+    the threshold
+  low_electricity_threshold: Low electricity threshold
+  low_electricity_threshold_description: "Current: {threshold} kWh"
+  low_electricity_threshold_dialog:
+    title: Set low electricity threshold
+    input_hint: Input remaining electricity
   account_setting: Account Settings
   sport_password_setting: PE system password
   experiment_password_setting: Physics experiment password
@@ -809,6 +887,17 @@ setting:
   electricity_account_setting: Electricity account setting
   schoolnet_password_setting: Campus net password
   schoolnet_password_description: If you have not setted it, you cannot query it.
+  aircon_imei_title: Aircon electricity data source
+  aircon_imei: Aircon IMEI
+  aircon_imei_not_set: Not set. Aircon electricity will be hidden on the power page.
+  aircon_imei_current: "Current IMEI: {imei}"
+  aircon_imei_saved: Aircon IMEI saved
+  aircon_imei_cleared: Aircon IMEI cleared
+  aircon_imei_invalid: No valid 15-digit IMEI found
+  aircon_imei_clear: Clear
+  scan_aircon_qr: Scan aircon QR code
+  pick_aircon_qr_image: Choose QR image
+  aircon_camera_unavailable: Camera scanning is unavailable on this platform. Choose a QR image or enter the IMEI manually.
   notification_setting: Notification Settings
   course_reminder_setting: Pre-class Reminder Settings
   course_reminder_description: Configure pre-class reminder notifications
@@ -1117,7 +1206,7 @@ setting:
 
       Copyright 2023-2025 BenderBlog Rodriguez and contributors.
 
-      Copyright 2025 Traintime PDA authors.
+      Copyright 2025-present Traintime PDA authors.
 
 
       The Source Code Form is subject to the terms of the Mozilla Public License,
@@ -1234,20 +1323,87 @@ school_card_status:
   failed_to_fetch: Failed fetching
   failed_to_query: Failed querying
 easter_egg_apple: |
-  Children's Day Wishes from developer
+  === Fly Me To The Moon ===
+  Vocal: Frank Sintara, 1964
 
-  No matter how dark the world is
-  Remember the good faith of all
+  Fly me to the moon
+  Let me play among the stars
 
-  Also be who you are
+  Let me see what's spring is like
+  on a Jupiter and Mars
 
-easter_egg_others: |
-  Children's Day Wishes from developer
+  Fill my heart with song
+  and let me sing forever more
 
-  No matter how dark the world is
-  Remember the good faith of all
+  You are all I long for
+  all I worship and I adore
 
-  Also be who you are
+  In other words
+  Please, be true
+
+  In other words
+  I love you
+
+  === Living Inside Your Love ===
+  Guitar: Earl Klugh, 1976
+
+  Can't get over the feeling
+  Living inside your love
+
+  I never want to lose the feeling
+  Living inside your love
+
+  Baby, you made my life so free
+  Living inside your love
+
+  I'm just where I want to be
+  Living inside your love
+
+  And I never could say
+  What I'm feeling today
+  For you...
+For youeaster_egg_others: |
+  === Cardcaptor Sakura OP3 ===
+  Vocal: Maaya Sakamoto, 2000
+  In Japanese Roman Letters
+
+  I'm a dreamer
+  hisomu PAWA-
+
+  watashi no sekai
+  yume to koi to fuan de dekite'ru
+  demo souzou wo shinai mono
+  kakurete'ru hazu
+
+  sora ni mukau kiki no you ni anata wo
+  massugu mitsumete'ru
+  mitsuketai naa kanaetai naa
+  shinjiru sore dake de
+
+  koerarenai mono wa nai
+  utau you ni kiseki no you ni
+  "omoi" ga subete wo kaete yuku yo
+  kitto kitto
+  odoroku kurai
+
+  === Living Inside Your Love ===
+  Guitar: Earl Klugh, 1976
+
+  Can't get over the feeling
+  Living inside your love
+
+  I never want to lose the feeling
+  Living inside your love
+
+  Baby, you made my life so free
+  Living inside your love
+
+  I'm just where I want to be
+  Living inside your love
+
+  And I never could say
+  What I'm feeling today
+  For you...
 easter_egg_robot:
   appbar: Welcome Students!
   title: Looking like you are worrying about opening semester?

@@ -3,11 +3,12 @@
 
 import 'package:signals/signals.dart';
 import 'package:watermeter/repository/logger.dart';
-import 'package:watermeter/repository/xidian_ids/school_card_session.dart';
+import 'package:watermeter/repository/ids_session/school_card_session.dart';
 
 class SchoolCardController {
   static final SchoolCardController i = SchoolCardController._();
   bool _isReloading = false;
+  final session = SchoolCardSession();
 
   SchoolCardController._();
 
@@ -22,7 +23,7 @@ class SchoolCardController {
         ? AsyncState.dataRefreshing(previous)
         : AsyncState.loading();
     try {
-      final result = await SchoolCardSession().getOverview();
+      final result = await session.getOverview();
       moneyStateSignal.value = AsyncState.data(result);
     } catch (e, s) {
       moneyStateSignal.value = AsyncState.error(e, s);

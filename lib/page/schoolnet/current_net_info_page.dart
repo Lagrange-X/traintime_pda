@@ -12,7 +12,7 @@ import 'package:watermeter/model/not_school_network_exception.dart';
 import 'package:watermeter/page/public_widget/public_widget.dart';
 import 'package:watermeter/page/schoolnet/net_data_row.dart';
 import 'package:watermeter/page/public_widget/info_card.dart';
-import 'package:watermeter/repository/schoolnet_session.dart';
+import 'package:watermeter/repository/miscellaneous_session/schoolnet_session.dart';
 
 class CurrentNetInfoPage extends StatefulWidget {
   const CurrentNetInfoPage({super.key});
@@ -28,15 +28,17 @@ class _CurrentNetInfoState extends State<CurrentNetInfoPage>
 
   late Future<CurrentUserNetInfo> _currentUserNetInfoFuture;
 
+  final session = SchoolnetSession();
+
   @override
   void initState() {
     super.initState();
-    _currentUserNetInfoFuture = SchoolnetSession().getCurrentUserNetInfo();
+    _currentUserNetInfoFuture = session.getCurrentUserNetInfo();
   }
 
   void _reload() {
     setState(() {
-      _currentUserNetInfoFuture = SchoolnetSession().getCurrentUserNetInfo();
+      _currentUserNetInfoFuture = session.getCurrentUserNetInfo();
     });
   }
 
@@ -139,7 +141,7 @@ class _CurrentNetInfoState extends State<CurrentNetInfoPage>
                         const SizedBox(height: 8),
                         LinearProgressIndicator(
                           value: usedPercentage.clamp(0.0, 1.0).toDouble(),
-                        ),
+                        ).padding(horizontal: 12),
                         const SizedBox(height: 4),
                         Text(
                           FlutterI18n.translate(
@@ -152,7 +154,7 @@ class _CurrentNetInfoState extends State<CurrentNetInfoPage>
                             },
                           ),
                           textAlign: TextAlign.right,
-                        ),
+                        ).padding(horizontal: 12),
                         const SizedBox(height: 8),
                         NetDataRow(
                           label: FlutterI18n.translate(
@@ -161,7 +163,7 @@ class _CurrentNetInfoState extends State<CurrentNetInfoPage>
                           ),
                           value: _formatBytes(currentUserNetInfo.sumBytes),
                           color: Colors.redAccent,
-                        ),
+                        ).padding(horizontal: 12),
                         NetDataRow(
                           label: FlutterI18n.translate(
                             context,
@@ -169,7 +171,7 @@ class _CurrentNetInfoState extends State<CurrentNetInfoPage>
                           ),
                           value: _formatBytes(currentUserNetInfo.remainBytes),
                           color: Colors.green,
-                        ),
+                        ).padding(horizontal: 12),
                         NetDataRow(
                           label: FlutterI18n.translate(
                             context,
@@ -177,7 +179,7 @@ class _CurrentNetInfoState extends State<CurrentNetInfoPage>
                           ),
                           value: _formatBytes(totalBytes),
                           color: Colors.blue,
-                        ),
+                        ).padding(horizontal: 12),
                       ],
                     )
                     .padding(vertical: 4)
