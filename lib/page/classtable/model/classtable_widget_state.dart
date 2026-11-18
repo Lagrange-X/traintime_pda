@@ -32,6 +32,9 @@ class ClasstableWidgetState with ChangeNotifier {
   }) : _source = source {
     _snapshot = source.snapshot.value;
     source.snapshot.addListener(_onSnapshot);
+    ClassTableBackgroundStyleConfig.imageChangeRevision.addListener(
+      _onBackgroundImageChanged,
+    );
     if (loadStyleSettings) {
       CurrentTimeIndicatorConfig.loadFromPreference();
       ClassCardStyleConfig.loadFromPreference();
@@ -59,10 +62,15 @@ class ClasstableWidgetState with ChangeNotifier {
   @override
   void dispose() {
     _source.snapshot.removeListener(_onSnapshot);
+    ClassTableBackgroundStyleConfig.imageChangeRevision.removeListener(
+      _onBackgroundImageChanged,
+    );
     _source.dispose();
     weekNavigationNotifier.dispose();
     super.dispose();
   }
+
+  void _onBackgroundImageChanged() => notifyListeners();
 
   void _onSnapshot() {
     _snapshot = _source.snapshot.value;
@@ -277,7 +285,7 @@ class ClasstableWidgetState with ChangeNotifier {
         events.add(
           ClassOrgainzedData.fromTimeArrangement(
             arrangement,
-            colorList[index % colorList.length],
+            colorList[arrangement.index % colorList.length],
             data.getClassDetail(arrangement).name,
           ),
         );
